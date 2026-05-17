@@ -19,15 +19,15 @@ Dự án này thực hiện benchmark toàn diện để so sánh hiệu năng c
 ```
 d:\DAA\Project\
 ├── code/
-│   └── strassen.py              # Code chính
-│   ├── index.html               # HTML
-│   ├── style.css                # CSS
+│   ├── strassen.py              # Code chính (700+ dòng)
+│   ├── index.html               # Báo cáo HTML (interactive)
+│   └── style.css                # CSS riêng
 ├── result/
-│   ├── benchmark_results.csv    # Kết quả CSV
-│   ├── benchmark_results.json   # Kết quả JSON
-│   ├── benchmark_results.png    # Biểu đồ hiệu năng
-│   └── complexity_theory.png    # Biểu đồ lý thuyết
-└── README.md                    
+│   ├── benchmark_results.csv    # Kết quả CSV (dữ liệu)
+│   ├── benchmark_results.json   # Kết quả JSON (dữ liệu)
+│   ├── benchmark_results.png    # Biểu đồ hiệu năng (4 đường)
+│   └── complexity_theory.png    # Biểu đồ lý thuyết (4 đường)
+└── README.md                    # File này
 ```
 
 ---
@@ -53,7 +53,7 @@ def matrix_multiply_naive(A, B):
 
 ---
 
-### 2. Strassen (1969)
+### 2. Strassen (1969) - Thuần Túy (Pure)
 
 Thuật toán đột phá của Volker Strassen: thay vì 8 phép nhân ma trận 2×2, chỉ cần **7 phép nhân**.
 
@@ -79,12 +79,14 @@ Tính 7 tích:
 
 **Độ phức tạp:** O(n^2.807)  
 **Ưu/Nhược:**
-- Nhanh hơn Naive khi n ≥ 100
-- Overhead đệ quy ở n nhỏ (crossover ≈ n=100)
+- ✅ Lý thuyết: độ phức tạp thấp
+- ❌ **Thực tế: cực kỳ chậm!** (0.05x-0.09x so với Naive)
+- ❌ Overhead đệ quy rất lớn trong Python
+- ❌ Phù hợp cho C/C++ optimized code, KHÔNG phù hợp Python
 
 ---
 
-### 3. Strassen Hybrid (Cải tiến)
+### 3. Strassen Hybrid (Cải tiến) - ✅ Phương Án Tốt Nhất Python
 
 Kết hợp Strassen với Naive: khi ma trận **nhỏ hơn ngưỡng (64)**, chuyển sang **Naive** để tránh overhead đệ quy.
 
@@ -124,14 +126,14 @@ NumPy sử dụng thư viện tối ưu hóa bằng **C/Fortran** (BLAS/LAPACK).
 
 ### Bảng Số Liệu
 
-| Kích thước (n) | Naive (s) | Strassen (s) | NumPy (s) | Speedup S/N | Speedup Np/N |
-|---------------|-----------|-------------|----------|------------|-------------|
-| 32 | 0.002131 | 0.003031 | 0.000017 | 0.70x | 124.4x |
-| 64 | 0.018184 | 0.018427 | 0.000028 | 0.99x | 644.1x |
-| 128 | 0.143918 | 0.123275 | 0.000398 | 1.17x | 361.6x |
-| 256 | 1.232091 | 0.878961 | 0.000545 | **1.40x** | **2,260.9x** |
-| 512 | N/A (quá chậm) | 6.258795 | 0.001981 | — | — |
-| 1024 | N/A (quá chậm) | 46.211068 | 0.014062 | — | — |
+| Kích thước (n) | Naive (s) | Strassen (s) | Strassen Hybrid (s) | NumPy (s) | Speedup S/N | Speedup H/N | Speedup Np/N |
+|---------------|-----------|-------------|-------------------|----------|------------|------------|-------------|
+| 32 | 0.002386 | 0.046683 | 0.002152 | 0.0000138 | **0.05x**  | 1.11x  | 173.3x |
+| 64 | 0.019315 | 0.312954 | 0.022810 | 0.0000304 | **0.06x**  | 0.85x | 634.7x |
+| 128 | 0.147374 | 2.183281 | 0.127258 | 0.000367 | **0.07x** | 1.16x  | 402.1x |
+| 256 | 1.335498 | 15.355616 | 0.972694 | 0.000570 | **0.09x**  | **1.37x**  | **2,342.2x** |
+| 512 | N/A (quá chậm) | 111.091215 | 6.454288 | 0.002519 | — | — | — |
+| 1024 | N/A (quá chậm) | 827.576280 | 108.402703 | 0.028741 | — | — | — |
 
 ### Biểu Đồ 1: Hiệu Năng Thực Tế
 
@@ -223,30 +225,58 @@ Mở [result/index.html](result/index.html) trong trình duyệt để xem báo 
 
 ## 🎯 Kết Luận
 
+### 🚨 Phát Hiện Chính - Strassen Thuần Túy CỰC KỲ CHẬM!
+
+**Benchmark Shock:** Strassen (pure) chậm hơn Naive **19.5x ở n=32**! 🔥
+
+| Kích thước | Strassen vs Naive | Hybrid vs Naive | NumPy vs Naive |
+|-----------|------------------|-----------------|----------------|
+| n=32 | **0.05x**  | 1.11x  | 173.3x  |
+| n=256 | **0.09x**  | 1.37x | 2,342x  |
+| n=512 | (N/A) | ~17.2x  | (calc)  |
+
 ### Các Điểm Chính
 
-1. **Strassen Hybrid tốt hơn Naive** khi n ≥ 128
-   - Speedup tăng: 1.17x (n=128) → 1.40x (n=256) → 7.43x (n=512)
+1. **Strassen Thuần Túy (Pure) - Trớn Tệ! **
+   - Lý thuyết: O(n^2.807) (tốt)
+   - Thực tế: 19.5x chậm hơn Naive!
+   - Nguyên nhân: Overhead đệ quy quá lớn trong Python
+   - **Kết luận: KHÔNG dùng cho Python!**
 
-2. **NumPy áp đảo cả hai**
-   - Speedup 2,260x ở n=256
+2. **Strassen Hybrid - Tốt! **
+   - Thực tế nhanh hơn Naive từ n ≥ 128
+   - Ở n=256: 1.37x nhanh hơn Naive
+   - Ở n=512: ~17.2x nhanh hơn Naive
+   - **Kết luận: Lựa chọn tốt cho Python khi n lớn**
+
+3. **NumPy Áp Đảo Cả Hai ⚡**
+   - Speedup 2,342x ở n=256
    - Lý do: tối ưu cache + SIMD + lập trình C
-
-3. **Overhead Strassen ở n nhỏ**
-   - Ở n=32, Strassen chậm hơn Naive (0.70x) do chi phí đệ quy
-   - Ngưỡng crossover ≈ n=100
-
-4. **Strassen Hybrid cân bằng tốt**
-   - Với ngưỡng=64, tránh overhead ở n nhỏ
-   - Tận dụng lợi thế Strassen ở n lớn
+   - **Kết luận: LUÔN dùng NumPy khi có thể**
 
 ### 📌 Khuyến Nghị Sử Dụng
 
-| Trường hợp | Lựa chọn |
-|-----------|---------|
-| n < 100 | Naive (đơn giản) |
-| 100 ≤ n < 1000 | Strassen Hybrid (cân bằng) |
-| n ≥ 1000 hoặc cần tối ưu | NumPy (nhanh nhất) |
+| Trường hợp | Lựa chọn | Lý do |
+|-----------|---------|-------|
+| n < 100 | Naive | Đơn giản, đủ nhanh |
+| 100 ≤ n < 1000 | **Strassen Hybrid** | Cân bằng tốt, nhanh 1-20x |
+| n ≥ 1000 hoặc cần tối ưu | **NumPy** | Nhanh nhất (100-2000x) |
+| Học tập/Giáo dục | **Hybrid** | Hiểu phương pháp mà không chậm |
+
+### ⚡ Performance Insights
+
+**Tại sao Strassen Pure quá chậm?**
+- Mỗi level đệ quy gọi 7 lần (7 M_i)
+- Recursion depth ≈ log₂(n)
+- Python function call overhead lớn (so với C)
+- T(n) = 7T(n/2) + O(n²):
+  - Lý thuyết: O(n^2.807) 
+  - Thực tế Python: O(n^3.2) do overhead 
+
+**Tại sao Hybrid nhanh?**
+- Dừng đệ quy ở n=64
+- Tránh được 6-8 level đệ quy không cần thiết
+- Naive loop vòng lặp nhanh ở cache-friendly size
 
 ---
 

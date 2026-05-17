@@ -502,10 +502,10 @@ def benchmark_algorithms(sizes=None, repeats=3):
     records = []
 
     print("=" * 75)
-    print("BENCHMARK: SO SÁNH 3 THUẬT TOÁN")
+    print("BENCHMARK: SO SÁNH 4 THUẬT TOÁN NHÂN MA TRẬN")
     print("=" * 75)
-    print(f"{'Size':>6}  {'Naive (s)':>12}  {'Strassen (s)':>14}  {'NumPy (s)':>11}  {'Speedup S/N':>12}  {'Speedup Np/N':>13}")
-    print("-" * 75)
+    print(f"{'n':>7} | {'Naive (s)':>13} | {'Strassen (s)':>14} | {'Strassen Hybrid (s)':>17} | {'NumPy (s)':>11} | {'Speedup S/N':>11} | {'Speedup SH/N':>13} | {'Speedup NP/N':>12}")
+    print("-" * 121)
 
     for n in sizes:
         # Sinh ma trận ngẫu nhiên
@@ -520,32 +520,39 @@ def benchmark_algorithms(sizes=None, repeats=3):
         else:
             t_naive = None   # Bỏ qua (quá lâu)
 
+        # --- Strassen thuần túy ---
+        t_strassen = time_function(strassen, A_list, B_list, repeats=repeats)
+
         # --- Strassen Hybrid ---
-        t_strassen = time_function(strassen_hybrid, A_list, B_list, repeats=repeats)
+        t_strassen_hybrid = time_function(strassen_hybrid, A_list, B_list, repeats=repeats)
 
         # --- NumPy ---
         t_numpy = time_function(np.dot, A_np, B_np, repeats=repeats)
 
         # Tính speedup
-        speedup_s  = (t_naive / t_strassen) if t_naive else None
+        speedup_s = (t_naive / t_strassen) if t_naive else None
+        speedup_s_hy  = (t_naive / t_strassen_hybrid) if t_naive else None
         speedup_np = (t_naive / t_numpy)    if t_naive else None
 
-        naive_str    = f"{t_naive:.4f}"    if t_naive   else "N/A (quá chậm)"
-        speedup_s_str  = f"{speedup_s:.2f}x"  if speedup_s  else "—"
-        speedup_np_str = f"{speedup_np:.2f}x" if speedup_np else "—"
+        naive_str    = f"{t_naive:.4f}"    if t_naive   else "    N/A    "
+        speed_up_s_str = f"{speedup_s:.2f}x" if speedup_s else "    —     "
+        speed_up_s_hy_str  = f"{speedup_s_hy:.2f}x"  if speedup_s_hy  else "    —     "
+        speedup_np_str = f"{speedup_np:.2f}x" if speedup_np else "    —     "
 
-        print(f"{n:>6}  {naive_str:>12}  {t_strassen:>14.4f}  {t_numpy:>11.6f}  {speedup_s_str:>12}  {speedup_np_str:>13}")
+        print(f"{n:>7} | {naive_str:>13} | {t_strassen:>14.4f} | {t_strassen_hybrid:>19.4f} | {t_numpy:>11.6f} | {speed_up_s_str:>11} | {speed_up_s_hy_str:>13} | {speedup_np_str:>12}")
 
         records.append({
             "Kích thước (n)": n,
             "Naive (s)": t_naive,
             "Strassen (s)": t_strassen,
+            "Strassen Hybrid (s)": t_strassen_hybrid,
             "NumPy (s)": t_numpy,
-            "Speedup Strassen/Naive": speedup_s,
+            "Speedup Strassen/Naive": speed_up_s_str,
+            "Speedup Strassen_Hybrid/Naive": speedup_s_hy,
             "Speedup NumPy/Naive": speedup_np,
         })
 
-    print("=" * 75)
+    print("=" * 110)
     df = pd.DataFrame(records)
     return df
 
@@ -563,7 +570,7 @@ def plot_results(df, output_path="benchmark_results.png"):
         output_path : Đường dẫn file hình xuất ra
     """
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
-    fig.suptitle("So sánh Hiệu năng: Nhân Ma trận\nNaive vs Strassen Hybrid vs NumPy (BLAS)",
+    fig.suptitle("So sánh Hiệu năng: Nhân Ma trận\nNaive vs Strassen vs Strassen Hybrid vs NumPy (BLAS)",
                  fontsize=14, fontweight='bold', y=1.02)
 
     sizes = df["Kích thước (n)"].tolist()
@@ -572,6 +579,7 @@ def plot_results(df, output_path="benchmark_results.png"):
     ax1 = axes[0]
     naive_times    = df["Naive (s)"].tolist()
     strassen_times = df["Strassen (s)"].tolist()
+    strassen_hybrid_times = df["Strassen Hybrid (s)"].tolist()
     numpy_times    = df["NumPy (s)"].tolist()
 
     # Lọc bỏ None cho Naive
@@ -580,7 +588,8 @@ def plot_results(df, output_path="benchmark_results.png"):
         vx, vy = zip(*valid_naive)
         ax1.plot(vx, vy, 'o-', color='#e74c3c', linewidth=2, markersize=7, label='Naive O(n³)')
 
-    ax1.plot(sizes, strassen_times, 's-', color='#3498db', linewidth=2, markersize=7, label='Strassen Hybrid O(n²·⁸⁰⁷)')
+    ax1.plot(sizes, strassen_times, 's-', color='#ff00ff', linewidth=2, markersize=7, label='Strassen O(n²·⁸⁰⁷)')
+    ax1.plot(sizes, strassen_hybrid_times, 's-', color='#3498db', linewidth=2, markersize=7, label='Strassen Hybrid O(n²·⁸⁰⁷)')
     ax1.plot(sizes, numpy_times,    '^-', color='#2ecc71', linewidth=2, markersize=7, label='NumPy (BLAS)')
 
     ax1.set_xlabel("Kích thước ma trận (n×n)", fontsize=11)
@@ -602,11 +611,15 @@ def plot_results(df, output_path="benchmark_results.png"):
     # ---- Biểu đồ 2: Speedup ----
     ax2 = axes[1]
     valid_speedup_s  = [(s, sp) for s, sp in zip(sizes, df["Speedup Strassen/Naive"]) if sp is not None]
+    valid_speedup_s_h = [(s, sp) for s, sp in zip(sizes, df["Speedup Strassen_Hybrid/Naive"]) if sp is None]
     valid_speedup_np = [(s, sp) for s, sp in zip(sizes, df["Speedup NumPy/Naive"])    if sp is not None]
 
     if valid_speedup_s:
         sx, sy = zip(*valid_speedup_s)
-        ax2.bar([x - 15 for x in sx], sy, width=25, color='#3498db', alpha=0.8, label='Strassen / Naive')
+        ax2.bar([x - 15 for x in sx], sy, width=25, color='#ff00ff', alpha=0.8, label='Strassen / Naive')
+    if valid_speedup_s_h:
+        sx, sy = zip(*valid_speedup_s_h)
+        ax2.bar([x - 15 for x in sx], sy, width=25, color='#3498db', alpha=0.8, label='Strassen Hybrid / Naive')
     if valid_speedup_np:
         nx, ny = zip(*valid_speedup_np)
         ax2.bar([x + 15 for x in nx], ny, width=25, color='#2ecc71', alpha=0.8, label='NumPy / Naive')
@@ -632,11 +645,13 @@ def plot_complexity_theory(output_path="complexity_theory.png"):
 
     ops_naive    = ns**3
     ops_strassen = ns**2.807
+    ops_strassen_hybrid = ns**2.807
     ops_numpy_est = ns**2.4   # BLAS sử dụng tối ưu cache, thực tế gần n^2.x
 
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(ns, ops_naive,     'o-', color='#e74c3c', linewidth=2, label='Naive: O(n³)')
-    ax.plot(ns, ops_strassen,  's-', color='#3498db', linewidth=2, label='Strassen: O(n^{2.807})')
+    ax.plot(ns, ops_strassen,  's-', color='#ff00ff', linewidth=2, label='Strassen: O(n^{2.807})')
+    ax.plot(ns, ops_strassen_hybrid,  's-', color='#3498db', linewidth=2, label='Strassen Hybrid: O(n^{2.807})')
     ax.plot(ns, ops_numpy_est, '^--',color='#2ecc71', linewidth=2, label='NumPy/BLAS (ước tính hiệu quả)')
 
     ax.set_xscale('log', base=2)

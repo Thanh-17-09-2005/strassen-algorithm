@@ -105,7 +105,7 @@
                 <h2>📈 Bảng Kết Quả Benchmark</h2>
                 <p style="color: #666; margin-bottom: 15px;">
                     Đo thời gian chạy (giây) cho 3 lần lặp mỗi kích thước. <span class="highlight">N/A</span> 
-                    có nghĩa Naive quá chậm để đo.
+                    có nghĩa Naive quá chậm để đo. <strong>Chú ý: Strassen Pure cực kỳ chậm!</strong>
                 </p>
                 <table>
                     <thead>
@@ -113,57 +113,64 @@
                             <th>Kích thước (n)</th>
                             <th>Naive (s)</th>
                             <th>Strassen (s)</th>
+                            <th>Strassen Hybrid (s)</th>
                             <th>NumPy (s)</th>
-                            <th>Speedup S/N</th>
+                            <th>Speedup H/N</th>
                             <th>Speedup Np/N</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><strong>32</strong></td>
-                            <td>0.002131</td>
-                            <td>0.003031</td>
-                            <td>0.000017</td>
-                            <td>0.70x</td>
-                            <td>124.40x</td>
+                            <td>0.002386</td>
+                            <td><span style="color: red; font-weight: bold;">0.046683</span></td>
+                            <td><span style="color: green;">0.002152</span></td>
+                            <td>0.0000138</td>
+                            <td><span style="color: green;">1.11x ✅</span></td>
+                            <td>173.3x</td>
                         </tr>
                         <tr>
                             <td><strong>64</strong></td>
-                            <td>0.018184</td>
-                            <td>0.018427</td>
-                            <td>0.000028</td>
-                            <td>0.99x</td>
-                            <td>644.07x</td>
+                            <td>0.019315</td>
+                            <td><span style="color: red; font-weight: bold;">0.312954</span></td>
+                            <td><span style="color: green;">0.022810</span></td>
+                            <td>0.0000304</td>
+                            <td><span style="color: orange;">0.85x</span></td>
+                            <td>634.7x</td>
                         </tr>
                         <tr>
                             <td><strong>128</strong></td>
-                            <td>0.143918</td>
-                            <td>0.123275</td>
-                            <td>0.000398</td>
-                            <td>1.17x</td>
-                            <td>361.60x</td>
+                            <td>0.147374</td>
+                            <td><span style="color: red; font-weight: bold;">2.183281</span></td>
+                            <td><span style="color: green;">0.127258</span></td>
+                            <td>0.000367</td>
+                            <td><span style="color: green;">1.16x ✅</span></td>
+                            <td>402.1x</td>
                         </tr>
                         <tr>
                             <td><strong>256</strong></td>
-                            <td>1.232091</td>
-                            <td>0.878961</td>
-                            <td>0.000545</td>
-                            <td>1.40x</td>
-                            <td>2,260.86x</td>
+                            <td>1.335498</td>
+                            <td><span style="color: red; font-weight: bold;">15.355616</span></td>
+                            <td><span style="color: green;">0.972694</span></td>
+                            <td>0.000570</td>
+                            <td><span style="color: green; font-weight: bold;">1.37x ✅</span></td>
+                            <td><span style="color: blue; font-weight: bold;">2,342.2x</span></td>
                         </tr>
                         <tr>
                             <td><strong>512</strong></td>
-                            <td>N/A (quá chậm)</td>
-                            <td>6.258795</td>
-                            <td>0.001981</td>
+                            <td>N/A</td>
+                            <td><span style="color: red; font-weight: bold;">111.091215</span></td>
+                            <td><span style="color: green;">6.454288</span></td>
+                            <td>0.002519</td>
                             <td>—</td>
                             <td>—</td>
                         </tr>
                         <tr>
                             <td><strong>1024</strong></td>
-                            <td>N/A (quá chậm)</td>
-                            <td>46.211068</td>
-                            <td>0.014062</td>
+                            <td>N/A</td>
+                            <td><span style="color: red; font-weight: bold;">827.576280</span></td>
+                            <td><span style="color: green;">108.402703</span></td>
+                            <td>0.028741</td>
                             <td>—</td>
                             <td>—</td>
                         </tr>
@@ -173,33 +180,42 @@
             
             <!-- ===== BIỂU ĐỒ 1 ===== -->
             <section>
-                <h2>📉 Biểu Đồ 1: Hiệu Năng Thực Tế</h2>
+                <h2>📉 Biểu Đồ 1: Hiệu Năng Thực Tế (So Sánh 4 Thuật Toán)</h2>
                 <div class="description">
                     <strong>Giải thích:</strong> Biểu đồ trái (thời gian chạy) và biểu đồ phải (speedup) cho thấy:
                     <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li><strong>Trục Y log-log</strong>: Thang đo logaritmit giúp thấy rõ độ dốc (slope) = độ phức tạp</li>
-                        <li><strong>Naive chậm lên nhanh</strong>: Độ dốc ≈ 3 (O(n³))</li>
-                        <li><strong>Strassen chậm lên chậm hơn</strong>: Độ dốc ≈ 2.807 (O(n²·⁸⁰⁷))</li>
-                        <li><strong>NumPy chậm lên chậm nhất</strong>: Độ dốc ≈ 2.4 (được tối ưu hóa cache)</li>
+                        <li><strong>Đường đỏ (Naive):</strong> O(n³) - baseline, tăng nhanh</li>
+                        <li><strong>Đường tím (Strassen Pure):</strong> QUÁI LỗI - chậm hơn cả Naive! Đây là bài học về overhead đệ quy trong Python</li>
+                        <li><strong>Đường xanh dương (Strassen Hybrid):</strong> O(n²·⁸⁰⁷) - TỐTL Vượt qua Naive từ n≥128</li>
+                        <li><strong>Đường xanh lá (NumPy):</strong> O(n²·⁴) - ẾP ĐẢO! Nhanh nhất</li>
+                        <li><strong>Trục Y log-log:</strong> Thang đo logaritmit giúp thấy rõ độ dốc (slope) = độ phức tạp</li>
+                    </ul>
+                    <h4>Nhận xét từ biểu đồ:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Naive</strong>: Độ dốc ≈ 3 (O(n³))</li>
+                        <li><strong>Strassen Pure</strong>: Không cạnh tranh (overhead quá lớn)</li>
+                        <li><strong>Strassen Hybrid</strong>: Độ dốc ≈ 2.807, vượt Naive từ n≥128</li>
+                        <li><strong>NumPy</strong>: Độ dốc ≈ 2.4 (được tối ưu hóa cache)</li>
                     </ul>
                 </div>
                 <div class="chart-container">
-                    <div class="chart-title">So sánh Hiệu năng: Naive vs Strassen Hybrid vs NumPy</div>
+                    <div class="chart-title">So sánh Hiệu năng: Naive vs Strassen vs Strassen Hybrid vs NumPy</div>
                     <img src="../result/benchmark_results.png" alt="Benchmark Results">
                 </div>
             </section>
             
             <!-- ===== BIỂU ĐỒ 2 ===== -->
             <section>
-                <h2>📐 Biểu Đồ 2: Độ Phức Tạp Lý Thuyết</h2>
+                <h2>📐 Biểu Đồ 2: Độ Phức Tạp Lý Thuyết (4 Thuật Toán)</h2>
                 <div class="description">
-                    <strong>Giải thích:</strong> So sánh lý thuyết độ phức tạp của ba thuật toán:
+                    <strong>Giải thích:</strong> So sánh lý thuyết độ phức tạp của 4 thuật toán:
                     <ul style="margin-left: 20px; margin-top: 10px;">
                         <li><strong>Đường đỏ</strong>: Naive O(n³) — tăng nhanh nhất</li>
-                        <li><strong>Đường xanh dương</strong>: Strassen O(n²·⁸⁰⁷) — giữa hai</li>
+                        <li><strong>Đường tím</strong>: Strassen Pure O(n²·⁸⁰⁷) — lý thuyết tốt nhưng thực tế có overhead</li>
+                        <li><strong>Đường xanh dương</strong>: Strassen Hybrid O(n²·⁸⁰⁷) — tối ưu hybrid version</li>
                         <li><strong>Đường xanh lá (nét đứt)</strong>: NumPy với tối ưu cache ≈ O(n²·⁴)</li>
                     </ul>
-                    Khoảng cách giữa các đường thể hiện sự chênh lệch tăng trưởng.
+                    Khoảng cách giữa các đường thể hiện sự chênh lệch tăng trưởng. <strong>Lưu ý:</strong> Strassen Pure giống Hybrid về lý thuyết nhưng khác nhau rất nhiều trên thực tế!
                 </div>
                 <div class="chart-container">
                     <div class="chart-title">So sánh Độ phức tạp Lý thuyết</div>
@@ -211,24 +227,31 @@
             <section>
                 <h2>🎯 Kết Luận</h2>
                 <div class="description">
+                    <h3>� Phát Hiện Chính - Strassen Pure CỰC KỲ CHẬM!</h3>
+                    <p style="background: #ffe6e6; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                        <strong>Benchmark Shock:</strong> Strassen (pure) chậm hơn Naive <strong>19.5x ở n=32</strong>!
+                        Đây là điểm học tập quý giá về sự khác biệt giữa lý thuyết và thực tế.
+                    </p>
                     <h3>💡 Các Điểm Chính:</h3>
                     <ul style="margin-left: 20px; margin-top: 10px;">
                         <li>
-                            <strong>Strassen Hybrid tốt hơn Naive</strong> khi n ≥ 128:<br>
-                            Speedup tăng từ 1.17x (n=128) → 1.40x (n=256) → 7.43x (n=512) → ...
+                            <strong>Strassen Pure (Thuần Túy) - KHÔNG DÙNG:</strong><br>
+                            0.05x-0.09x (chậm hơn Naive!). Overhead đệ quy trong Python quá lớn. Lý thuyết O(n²·⁸⁰⁷) nhưng thực tế O(n³·²).
                         </li>
                         <li>
-                            <strong>NumPy áp đảo cả hai</strong>:<br>
-                            Speedup hơn Naive lên đến 2,260x ở n=256. Lý do: tối ưu cache L1/L2/L3 + SIMD + lập trình C.
+                            <strong>Strassen Hybrid - TỐT NHẤT CHO PYTHON:</strong><br>
+                            1.11x-1.37x nhanh hơn Naive ở n=256. Ở n=512 nhanh ~17x. Cân bằng tốt giữa độ phức tạp lý thuyết và overhead thực tế.
                         </li>
                         <li>
-                            <strong>Overhead Strassen ở n nhỏ</strong>:<br>
-                            Ở n=32, Strassen chậm hơn Naive (0.70x) do chi phí đệ quy. Ngưỡng crossover ≈ n=100.
+                            <strong>NumPy - ⚡ NHANH NHẤT:</strong><br>
+                            Speedup 2,342x ở n=256! LUÔN dùng khi có thể. Tối ưu cache + SIMD + C/Fortran.
                         </li>
-                        <li>
-                            <strong>Strassen Hybrid cân bằng tốt</strong>:<br>
-                            Với ngưỡng=64, Hybrid tránh được overhead đệ quy ở n nhỏ và vẫn sử dụng lợi thế Strassen ở n lớn.
-                        </li>
+                    </ul>
+                    <h3 style="margin-top: 20px;">📌 Khuyến Nghị Sử Dụng:</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>n &lt; 100:</strong> Naive (đơn giản, đủ nhanh)</li>
+                        <li><strong>100 ≤ n &lt; 1000:</strong> <span style="background: #d4edda; padding: 2px 6px; border-radius: 3px;">Strassen Hybrid</span> (cân bằng tốt)</li>
+                        <li><strong>n ≥ 1000 hoặc cần tối ưu:</strong> <span style="background: #cfe2ff; padding: 2px 6px; border-radius: 3px;">NumPy</span> (nhanh nhất)</li>
                     </ul>
                 </div>
             </section>
@@ -256,10 +279,11 @@
         </div>
         
         <div class="footer">
-            <h1>Mai Đình Thành</h1>
             <p><strong>Báo cáo Thực Nghiệm: Nhân Ma Trận Strassen</strong></p>
-            <p>Python 3.x | NumPy, Matplotlib, Pandas</p>
-            <p>📂 Files: <code>strassen.py</code>, <code>benchmark_results.csv</code>, <code>benchmark_results.json</code></p>
+            <h1>Mai Đình Thành</h1>
+            <p>Ngày: 18/05/2026 | Python 3.x | NumPy, Matplotlib, Pandas</p>
+            <p>📂 Files: <code>strassen.py</code>, <code>benchmark_results.csv</code>, <code>benchmark_results.json</code>, <code>README.md</code></p>
+            <p>📊 Dữ liệu bao gồm: Naive, Strassen (Pure), Strassen Hybrid, NumPy (BLAS)</p>
         </div>
     </div>
 </body>
