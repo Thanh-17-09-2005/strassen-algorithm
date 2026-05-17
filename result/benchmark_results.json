@@ -1,0 +1,50 @@
+[
+  {
+    "Kích thước (n)": 32,
+    "Naive (s)": 0.0020633999999214816,
+    "Strassen (s)": 0.0020729000001059226,
+    "NumPy (s)": 1.4433333186995393e-05,
+    "Speedup Strassen/Naive": 0.995417048490542,
+    "Speedup NumPy/Naive": 142.96074047404585
+  },
+  {
+    "Kích thước (n)": 64,
+    "Naive (s)": 0.01684249999986302,
+    "Strassen (s)": 0.017225666666490724,
+    "NumPy (s)": 2.6266666888356365e-05,
+    "Speedup Strassen/Naive": 0.9777560616929223,
+    "Speedup NumPy/Naive": 641.2119235169902
+  },
+  {
+    "Kích thước (n)": 128,
+    "Naive (s)": 0.14393013333331814,
+    "Strassen (s)": 0.12416229999992841,
+    "NumPy (s)": 0.0003310000001874869,
+    "Speedup Strassen/Naive": 1.1592096258961144,
+    "Speedup NumPy/Naive": 434.83423943139707
+  },
+  {
+    "Kích thước (n)": 256,
+    "Naive (s)": 1.2843598000002505,
+    "Strassen (s)": 0.9439712333329832,
+    "NumPy (s)": 0.0006845666669808755,
+    "Speedup Strassen/Naive": 1.3605920971398884,
+    "Speedup NumPy/Naive": 1876.1646775245795
+  },
+  {
+    "Kích thước (n)": 512,
+    "Naive (s)": null,
+    "Strassen (s)": 6.199290366666598,
+    "NumPy (s)": 0.002005766666419125,
+    "Speedup Strassen/Naive": null,
+    "Speedup NumPy/Naive": null
+  },
+  {
+    "Kích thước (n)": 1024,
+    "Naive (s)": null,
+    "Strassen (s)": 49.25673359999988,
+    "NumPy (s)": 0.01576276666673948,
+    "Speedup Strassen/Naive": null,
+    "Speedup NumPy/Naive": null
+  }
+]
