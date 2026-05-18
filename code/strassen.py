@@ -461,7 +461,7 @@ def run_test_cases():
 # BENCHMARK
 # =========
 
-def time_function(func, *args, repeats=3):
+def time_function(func, *args, repeats=10):
     """
     Đo thời gian chạy trung bình của một hàm.
 
@@ -514,11 +514,8 @@ def benchmark_algorithms(sizes=None, repeats=3):
         A_np   = np.array(A_list, dtype=float)
         B_np   = np.array(B_list, dtype=float)
 
-        # --- Naive ---
-        if n <= 256:    # Naive quá chậm với n > 256
-            t_naive = time_function(matrix_multiply_naive, A_list, B_list, repeats=repeats)
-        else:
-            t_naive = None   # Bỏ qua (quá lâu)
+        # --- Naive
+        t_naive = time_function(matrix_multiply_naive, A_list, B_list, repeats=repeats)
 
         # --- Strassen thuần túy ---
         t_strassen = time_function(strassen, A_list, B_list, repeats=repeats)
@@ -589,7 +586,7 @@ def plot_results(df, output_path="benchmark_results.png"):
         ax1.plot(vx, vy, 'o-', color='#e74c3c', linewidth=2, markersize=7, label='Naive O(n³)')
 
     ax1.plot(sizes, strassen_times, 's-', color='#ff00ff', linewidth=2, markersize=7, label='Strassen O(n²·⁸⁰⁷)')
-    ax1.plot(sizes, strassen_hybrid_times, 's-', color='#3498db', linewidth=2, markersize=7, label='Strassen Hybrid O(n²·⁸⁰⁷)')
+    ax1.plot(sizes, strassen_hybrid_times, 's-', color='#3498db', linewidth=2, markersize=7, label='Strassen Hybrid')
     ax1.plot(sizes, numpy_times,    '^-', color='#2ecc71', linewidth=2, markersize=7, label='NumPy (BLAS)')
 
     ax1.set_xlabel("Kích thước ma trận (n×n)", fontsize=11)
@@ -644,13 +641,11 @@ def plot_complexity_theory(output_path="complexity_theory.png"):
     ns = np.array([2**i for i in range(1, 12)])
 
     ops_naive    = ns**3
-    ops_strassen = ns**2.807
     ops_strassen_hybrid = ns**2.807
     ops_numpy_est = ns**2.4   # BLAS sử dụng tối ưu cache, thực tế gần n^2.x
 
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(ns, ops_naive,     'o-', color='#e74c3c', linewidth=2, label='Naive: O(n³)')
-    ax.plot(ns, ops_strassen,  's-', color='#ff00ff', linewidth=2, label='Strassen: O(n^{2.807})')
     ax.plot(ns, ops_strassen_hybrid,  's-', color='#3498db', linewidth=2, label='Strassen Hybrid: O(n^{2.807})')
     ax.plot(ns, ops_numpy_est, '^--',color='#2ecc71', linewidth=2, label='NumPy/BLAS (ước tính hiệu quả)')
 

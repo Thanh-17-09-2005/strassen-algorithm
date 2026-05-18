@@ -1,62 +1,62 @@
 [
   {
     "Kích thước (n)": 32,
-    "Naive (s)": 0.0023856333342943494,
-    "Strassen (s)": 0.046682999999878426,
-    "Strassen Hybrid (s)": 0.002152066666894825,
-    "NumPy (s)": 1.3766666597803123e-05,
+    "Naive (s)": 0.002181198666827792,
+    "Strassen (s)": 0.04758101600024626,
+    "Strassen Hybrid (s)": 0.0019457123332055442,
+    "NumPy (s)": 2.0413333307563637e-05,
     "Speedup Strassen/Naive": "0.05x",
-    "Speedup Strassen_Hybrid/Naive": 1.1085313345503989,
-    "Speedup NumPy/Naive": 173.29055783736692
+    "Speedup Strassen_Hybrid/Naive": 1.1210283399058718,
+    "Speedup NumPy/Naive": 106.85166572083574
   },
   {
     "Kích thước (n)": 64,
-    "Naive (s)": 0.01931473333388567,
-    "Strassen (s)": 0.3129538666665515,
-    "Strassen Hybrid (s)": 0.022810466665760032,
-    "NumPy (s)": 3.0433333449764177e-05,
-    "Speedup Strassen/Naive": "0.06x",
-    "Speedup Strassen_Hybrid/Naive": 0.8467487148291586,
-    "Speedup NumPy/Naive": 634.6571717412486
+    "Naive (s)": 0.016653136332934082,
+    "Strassen (s)": 0.31382670033326576,
+    "Strassen Hybrid (s)": 0.016467460999895895,
+    "NumPy (s)": 5.55260006270449e-05,
+    "Speedup Strassen/Naive": "0.05x",
+    "Speedup Strassen_Hybrid/Naive": 1.011275286034645,
+    "Speedup NumPy/Naive": 299.91600592287
   },
   {
     "Kích thước (n)": 128,
-    "Naive (s)": 0.1473739999995208,
-    "Strassen (s)": 2.1832814666662066,
-    "Strassen Hybrid (s)": 0.12725766666759833,
-    "NumPy (s)": 0.0003665333339692249,
-    "Speedup Strassen/Naive": "0.07x",
-    "Speedup Strassen_Hybrid/Naive": 1.1580756103635552,
-    "Speedup NumPy/Naive": 402.0752994102706
+    "Naive (s)": 0.16181080433307216,
+    "Strassen (s)": 2.1437399596667697,
+    "Strassen Hybrid (s)": 0.1681368733331207,
+    "NumPy (s)": 0.00020865800009535937,
+    "Speedup Strassen/Naive": "0.08x",
+    "Speedup Strassen_Hybrid/Naive": 0.962375480912417,
+    "Speedup NumPy/Naive": 775.4833471955187
   },
   {
     "Kích thước (n)": 256,
-    "Naive (s)": 1.3354980000003707,
-    "Strassen (s)": 15.355615800000427,
-    "Strassen Hybrid (s)": 0.9726936000000327,
-    "NumPy (s)": 0.0005702000004627431,
-    "Speedup Strassen/Naive": "0.09x",
-    "Speedup Strassen_Hybrid/Naive": 1.3729893976893914,
-    "Speedup NumPy/Naive": 2342.157135946253
+    "Naive (s)": 2.3615238493336315,
+    "Strassen (s)": 17.13219536899972,
+    "Strassen Hybrid (s)": 0.9383379519998319,
+    "NumPy (s)": 0.0013263443333926261,
+    "Speedup Strassen/Naive": "0.14x",
+    "Speedup Strassen_Hybrid/Naive": 2.516709298926507,
+    "Speedup NumPy/Naive": 1780.4756953973958
   },
   {
     "Kích thước (n)": 512,
-    "Naive (s)": null,
-    "Strassen (s)": 111.0912154000004,
-    "Strassen Hybrid (s)": 6.454287866667073,
-    "NumPy (s)": 0.0025191999999757777,
-    "Speedup Strassen/Naive": "    —     ",
-    "Speedup Strassen_Hybrid/Naive": null,
-    "Speedup NumPy/Naive": null
+    "Naive (s)": 20.80470034166653,
+    "Strassen (s)": 120.63992001966653,
+    "Strassen Hybrid (s)": 7.364555210333492,
+    "NumPy (s)": 0.008970498999891182,
+    "Speedup Strassen/Naive": "0.17x",
+    "Speedup Strassen_Hybrid/Naive": 2.8249771707155715,
+    "Speedup NumPy/Naive": 2319.2355678228046
   },
   {
     "Kích thước (n)": 1024,
-    "Naive (s)": null,
-    "Strassen (s)": 827.5762802999985,
-    "Strassen Hybrid (s)": 108.4027030999993,
-    "NumPy (s)": 0.028740733333203632,
-    "Speedup Strassen/Naive": "    —     ",
-    "Speedup Strassen_Hybrid/Naive": null,
-    "Speedup NumPy/Naive": null
+    "Naive (s)": 158.7584603113331,
+    "Strassen (s)": 856.3101147849999,
+    "Strassen Hybrid (s)": 51.983111649333296,
+    "NumPy (s)": 0.0689303653331687,
+    "Speedup Strassen/Naive": "0.19x",
+    "Speedup Strassen_Hybrid/Naive": 3.054039192233873,
+    "Speedup NumPy/Naive": 2303.171607229824
   }
 ]

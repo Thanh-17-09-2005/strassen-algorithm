@@ -90,12 +90,12 @@
                         <div class="stat-value">1024×1024</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Speedup (Strassen/Naive) @256</div>
-                        <div class="stat-value">1.40x</div>
+                        <div class="stat-label">Speedup (Hybrid/Naive) @256</div>
+                        <div class="stat-value">2.52x</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Speedup (NumPy/Naive) @256</div>
-                        <div class="stat-value">2,260x</div>
+                        <div class="stat-value">1,780.5x</div>
                     </div>
                 </div>
             </section>
@@ -115,6 +115,7 @@
                             <th>Strassen (s)</th>
                             <th>Strassen Hybrid (s)</th>
                             <th>NumPy (s)</th>
+                            <th>Speedup S/N</th>
                             <th>Speedup H/N</th>
                             <th>Speedup Np/N</th>
                         </tr>
@@ -122,57 +123,63 @@
                     <tbody>
                         <tr>
                             <td><strong>32</strong></td>
-                            <td>0.002386</td>
-                            <td><span style="color: red; font-weight: bold;">0.046683</span></td>
-                            <td><span style="color: green;">0.002152</span></td>
-                            <td>0.0000138</td>
-                            <td><span style="color: green;">1.11x ✅</span></td>
-                            <td>173.3x</td>
+                            <td><span style="color: blue; font-weight: bold;">0.00218</span></td>
+                            <td><span style="color: red; font-weight: bold;">0.04758</span></td>
+                            <td><span style="color: orange; font-weight: bold;">0.00195</span></td>
+                            <td><span style="color: green; font-weight: bold;">0.00002</span></td>
+                            <td><i>0.05x</i></td>
+                            <td><i>1.12x</i></td>
+                            <td><i>106.9x</i></td>
                         </tr>
                         <tr>
                             <td><strong>64</strong></td>
-                            <td>0.019315</td>
-                            <td><span style="color: red; font-weight: bold;">0.312954</span></td>
-                            <td><span style="color: green;">0.022810</span></td>
-                            <td>0.0000304</td>
-                            <td><span style="color: orange;">0.85x</span></td>
-                            <td>634.7x</td>
+                            <td><span style="color: blue; font-weight: bold;">0.01665</span></td>
+                            <td><span style="color: red; font-weight: bold;">0.31383</span></td>
+                            <td><span style="color: orange; font-weight: bold;">0.01647</span></td>
+                            <td><span style="color: green; font-weight: bold;">0.00006</span></td>
+                            <td><i>0.05x</i></td>
+                            <td><i>1.01x</i></td>
+                            <td><i>299.9x</i></td>
                         </tr>
                         <tr>
                             <td><strong>128</strong></td>
-                            <td>0.147374</td>
-                            <td><span style="color: red; font-weight: bold;">2.183281</span></td>
-                            <td><span style="color: green;">0.127258</span></td>
-                            <td>0.000367</td>
-                            <td><span style="color: green;">1.16x ✅</span></td>
-                            <td>402.1x</td>
+                            <td><span style="color: blue; font-weight: bold;">0.16181</span></td>
+                            <td><span style="color: red; font-weight: bold;">2.14374</span></td>
+                            <td><span style="color: orange; font-weight: bold;">0.15814</span></td>
+                            <td><span style="color: green; font-weight: bold;">0.00021</span></td>
+                            <td><i>0.08x</i></td>
+                            <td><i>0.96x</i></td>
+                            <td><i>775.5x</i></td>
                         </tr>
                         <tr>
                             <td><strong>256</strong></td>
-                            <td>1.335498</td>
-                            <td><span style="color: red; font-weight: bold;">15.355616</span></td>
-                            <td><span style="color: green;">0.972694</span></td>
-                            <td>0.000570</td>
-                            <td><span style="color: green; font-weight: bold;">1.37x ✅</span></td>
-                            <td><span style="color: blue; font-weight: bold;">2,342.2x</span></td>
+                            <td><span style="color: blue; font-weight: bold;">2.3615</span></td>
+                            <td><span style="color: red; font-weight: bold;">17.13220</span></td>
+                            <td><span style="color: orange; font-weight: bold;">0.93834</span></td>
+                            <td><span style="color: green; font-weight: bold;">0.00133</span></td>
+                            <td><i>0.14x</i></td>
+                            <td><i>2.52x</i></td>
+                            <td><i>1,780.5x</i></td>
                         </tr>
                         <tr>
                             <td><strong>512</strong></td>
-                            <td>N/A</td>
-                            <td><span style="color: red; font-weight: bold;">111.091215</span></td>
-                            <td><span style="color: green;">6.454288</span></td>
-                            <td>0.002519</td>
-                            <td>—</td>
-                            <td>—</td>
+                            <td><span style="color: blue; font-weight: bold;">20.80470</span></td>
+                            <td><span style="color: red; font-weight: bold;">120.63992</span></td>
+                            <td><span style="color: orange; font-weight: bold;">7.36456</span></td>
+                            <td><span style="color: green; font-weight: bold;">0.00897</span></td>
+                            <td><i>0.17x</i></td>
+                            <td><i>2.82x</i></td>
+                            <td><i>2,319.2x</i></td>
                         </tr>
                         <tr>
                             <td><strong>1024</strong></td>
-                            <td>N/A</td>
-                            <td><span style="color: red; font-weight: bold;">827.576280</span></td>
-                            <td><span style="color: green;">108.402703</span></td>
-                            <td>0.028741</td>
-                            <td>—</td>
-                            <td>—</td>
+                            <td><span style="color: blue; font-weight: bold;">158.75846</span></td>
+                            <td><span style="color: red; font-weight: bold;">856.31011</span></td>
+                            <td><span style="color: orange; font-weight: bold;">51.98311</span></td>
+                            <td><span style="color: green; font-weight: bold;">0.06893</span></td>
+                            <td><i>0.19x</i></td>
+                            <td><i>3.05x</i></td>
+                            <td><i>2,303.2x</i></td>
                         </tr>
                     </tbody>
                 </table>
@@ -250,8 +257,8 @@
                     <h3 style="margin-top: 20px;">📌 Khuyến Nghị Sử Dụng:</h3>
                     <ul style="margin-left: 20px; margin-top: 10px;">
                         <li><strong>n &lt; 100:</strong> Naive (đơn giản, đủ nhanh)</li>
-                        <li><strong>100 ≤ n &lt; 1000:</strong> <span style="background: #d4edda; padding: 2px 6px; border-radius: 3px;">Strassen Hybrid</span> (cân bằng tốt)</li>
-                        <li><strong>n ≥ 1000 hoặc cần tối ưu:</strong> <span style="background: #cfe2ff; padding: 2px 6px; border-radius: 3px;">NumPy</span> (nhanh nhất)</li>
+                        <li><strong>100 ≤ n &lt; 1000:</strong> <span style="background: #d4edda; padding: 2px 6px; border-radius: 3px;">Strassen Hybrid</span> (cân bằng, nhanh 2.5-3x)</li>
+                        <li><strong>n ≥ 1000 hoặc cần tối ưu:</strong> <span style="background: #cfe2ff; padding: 2px 6px; border-radius: 3px;">NumPy</span> (nhanh 2,300x+ so với Naive)</li>
                     </ul>
                 </div>
             </section>

@@ -79,10 +79,10 @@ Tính 7 tích:
 
 **Độ phức tạp:** O(n^2.807)  
 **Ưu/Nhược:**
-- ✅ Lý thuyết: độ phức tạp thấp
-- ❌ **Thực tế: cực kỳ chậm!** (0.05x-0.09x so với Naive)
-- ❌ Overhead đệ quy rất lớn trong Python
-- ❌ Phù hợp cho C/C++ optimized code, KHÔNG phù hợp Python
+- Lý thuyết: độ phức tạp thấp
+- **Thực tế: cực kỳ chậm!** (0.05x-0.09x so với Naive)
+- Overhead đệ quy rất lớn trong Python
+- Phù hợp cho C/C++ optimized code, KHÔNG phù hợp Python
 
 ---
 
@@ -128,12 +128,12 @@ NumPy sử dụng thư viện tối ưu hóa bằng **C/Fortran** (BLAS/LAPACK).
 
 | Kích thước (n) | Naive (s) | Strassen (s) | Strassen Hybrid (s) | NumPy (s) | Speedup S/N | Speedup H/N | Speedup Np/N |
 |---------------|-----------|-------------|-------------------|----------|------------|------------|-------------|
-| 32 | 0.002386 | 0.046683 | 0.002152 | 0.0000138 | **0.05x**  | 1.11x  | 173.3x |
-| 64 | 0.019315 | 0.312954 | 0.022810 | 0.0000304 | **0.06x**  | 0.85x | 634.7x |
-| 128 | 0.147374 | 2.183281 | 0.127258 | 0.000367 | **0.07x** | 1.16x  | 402.1x |
-| 256 | 1.335498 | 15.355616 | 0.972694 | 0.000570 | **0.09x**  | **1.37x**  | **2,342.2x** |
-| 512 | N/A (quá chậm) | 111.091215 | 6.454288 | 0.002519 | — | — | — |
-| 1024 | N/A (quá chậm) | 827.576280 | 108.402703 | 0.028741 | — | — | — |
+| 32 | 0.00218 | 0.04758 | 0.00195 | 0.00002 | **0.05x** | 1.12x | 106.9x |
+| 64 | 0.01665 | 0.31383 | 0.01647 | 0.00006 | **0.05x** | 1.01x | 299.9x |
+| 128 | 0.16181 | 2.14374 | 0.16814 | 0.00021 | **0.08x** | 0.96x | 775.5x |
+| 256 | 2.36152 | 17.13220 | 0.93834 | 0.00133 | **0.14x** | 2.52x | 1,780.5x |
+| 512 | 20.80470 | 120.63992 | 7.36456 | 0.00897 | **0.17x** | 2.82x | 2,319.2x |
+| 1024 | 158.75846 | 856.31011 | 51.98311 | 0.06893 | **0.19x** | 3.05x | 2,303.2x |
 
 ### Biểu Đồ 1: Hiệu Năng Thực Tế
 
@@ -231,9 +231,10 @@ Mở [result/index.html](result/index.html) trong trình duyệt để xem báo 
 
 | Kích thước | Strassen vs Naive | Hybrid vs Naive | NumPy vs Naive |
 |-----------|------------------|-----------------|----------------|
-| n=32 | **0.05x**  | 1.11x  | 173.3x  |
-| n=256 | **0.09x**  | 1.37x | 2,342x  |
-| n=512 | (N/A) | ~17.2x  | (calc)  |
+| n=32 | **0.05x** | 1.12x | 106.9x |
+| n=256 | **0.14x** | 2.52x | 1,780.5x |
+| n=512 | **0.17x** | 2.82x | 2,319.2x |
+| n=1024 | **0.19x** | 3.05x | 2,303.2x |
 
 ### Các Điểm Chính
 
@@ -243,14 +244,16 @@ Mở [result/index.html](result/index.html) trong trình duyệt để xem báo 
    - Nguyên nhân: Overhead đệ quy quá lớn trong Python
    - **Kết luận: KHÔNG dùng cho Python!**
 
-2. **Strassen Hybrid - Tốt! **
+2. **Strassen Hybrid - Tốt!**
    - Thực tế nhanh hơn Naive từ n ≥ 128
-   - Ở n=256: 1.37x nhanh hơn Naive
-   - Ở n=512: ~17.2x nhanh hơn Naive
+   - Ở n=256: 2.52x nhanh hơn Naive
+   - Ở n=512: 2.82x nhanh hơn Naive
+   - Ở n=1024: 3.05x nhanh hơn Naive
    - **Kết luận: Lựa chọn tốt cho Python khi n lớn**
 
 3. **NumPy Áp Đảo Cả Hai ⚡**
-   - Speedup 2,342x ở n=256
+   - Speedup 1,780.5x ở n=256
+   - Speedup 2,319.2x ở n=512
    - Lý do: tối ưu cache + SIMD + lập trình C
    - **Kết luận: LUÔN dùng NumPy khi có thể**
 
@@ -259,8 +262,8 @@ Mở [result/index.html](result/index.html) trong trình duyệt để xem báo 
 | Trường hợp | Lựa chọn | Lý do |
 |-----------|---------|-------|
 | n < 100 | Naive | Đơn giản, đủ nhanh |
-| 100 ≤ n < 1000 | **Strassen Hybrid** | Cân bằng tốt, nhanh 1-20x |
-| n ≥ 1000 hoặc cần tối ưu | **NumPy** | Nhanh nhất (100-2000x) |
+| 100 ≤ n < 1000 | **Strassen Hybrid** | Cân bằng tốt, nhanh 2.5-3x |
+| n ≥ 1000 hoặc cần tối ưu | **NumPy** | Nhanh nhất (1,800-2,300x) |
 | Học tập/Giáo dục | **Hybrid** | Hiểu phương pháp mà không chậm |
 
 ### ⚡ Performance Insights
