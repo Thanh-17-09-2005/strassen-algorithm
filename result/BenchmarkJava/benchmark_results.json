@@ -1,0 +1,50 @@
+[
+  {
+    "Kích thước (n)": 32,
+    "Naive (s)": 0.000146,
+    "Strassen (s)": 0.018524,
+    "Strassen Hybrid (s)": 0.000060,
+    "Speedup Strassen/Naive": 0.01,
+    "Speedup Strassen_Hybrid/Naive": 2.45
+  },
+  {
+    "Kích thước (n)": 64,
+    "Naive (s)": 0.000491,
+    "Strassen (s)": 0.065350,
+    "Strassen Hybrid (s)": 0.000271,
+    "Speedup Strassen/Naive": 0.01,
+    "Speedup Strassen_Hybrid/Naive": 1.81
+  },
+  {
+    "Kích thước (n)": 128,
+    "Naive (s)": 0.002930,
+    "Strassen (s)": 0.342678,
+    "Strassen Hybrid (s)": 0.001939,
+    "Speedup Strassen/Naive": 0.01,
+    "Speedup Strassen_Hybrid/Naive": 1.51
+  },
+  {
+    "Kích thước (n)": 256,
+    "Naive (s)": 0.022431,
+    "Strassen (s)": 2.278910,
+    "Strassen Hybrid (s)": 0.014758,
+    "Speedup Strassen/Naive": 0.01,
+    "Speedup Strassen_Hybrid/Naive": 1.52
+  },
+  {
+    "Kích thước (n)": 512,
+    "Naive (s)": 0.206427,
+    "Strassen (s)": 17.079857,
+    "Strassen Hybrid (s)": 0.109607,
+    "Speedup Strassen/Naive": 0.01,
+    "Speedup Strassen_Hybrid/Naive": 1.88
+  },
+  {
+    "Kích thước (n)": 1024,
+    "Naive (s)": 6.330126,
+    "Strassen (s)": 117.260052,
+    "Strassen Hybrid (s)": 0.811743,
+    "Speedup Strassen/Naive": 0.05,
+    "Speedup Strassen_Hybrid/Naive": 7.80
+  }
+]
